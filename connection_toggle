@@ -1,0 +1,24 @@
+#!/bin/bash
+if [[ -n $BLOCK_INSTANCE ]]; then
+  con=$BLOCK_INSTANCE;
+else
+  exit 1;
+fi
+
+con_active=$(nmcli connection show --active | grep "$con")
+case $BLOCK_BUTTON in
+  1)
+    if [ "$con_active" == "" ]; then 
+      echo $'<span foreground="#00FF00"><i>'$con'</i></span>';
+      nmcli con up id "$con" >/dev/null; 
+    else
+      echo '<span foreground="#FF0000"><i>'$con'</i></span>';
+      nmcli con down id "$con" >/dev/null;
+    fi;;
+  *)
+    if [ "$con_active" != "" ]; then 
+      echo $'<span foreground="#00FF00"><i>'$con'</i></span>';
+    else
+      echo '<span foreground="#FF0000"><i>'$con'</i></span>';
+    fi;;   
+esac

@@ -1,0 +1,9 @@
+#!/bin/bash
+con_name=$(nmcli -m multiline connection show --active | grep "NAME:" | sed -rn "s/NAME:\s+([^\s-]+)/\1/p")
+con_name="${con_name//$'\n'/, }"
+
+if [ "$con_name" == "" ]; then
+  echo '<span foreground="#FF0000"><i>no connection</i></span>'
+else
+  echo $con_name
+fi

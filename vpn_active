@@ -1,0 +1,8 @@
+#!/bin/bash
+vpn_name=$(nmcli -m multiline connection show --active | grep -B2 "TYPE:\s*vpn" | grep NAME | sed -rn "s/NAME:\s+([^\s-]+)/\1/p")
+
+if [ "$vpn_name" == "" ]; then
+  echo '<span foreground="#FF0000"><i>down</i></span>'
+else
+  echo '<span foreground="#00FF00"><i>'$vpn_name'</i></span>'
+fi

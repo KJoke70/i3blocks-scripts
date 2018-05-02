@@ -1,0 +1,7 @@
+#!/bin/bash
+var=$(nmcli radio wifi | grep enabled)
+case $BLOCK_BUTTON in
+  1) if [ "$var" != "" ]; then nmcli radio wifi off; echo '<span foreground="#FF0000"><i>off</i></span>'; else nmcli radio wifi on; echo '<span foreground="#00FF00"><i>on</i></span>'; fi;;
+  *) if [ "$var" == "" ]; then echo '<span foreground="#FF0000"><i>off</i></span>'; else echo '<span foreground="#00FF00"><i>on</i></span>'; fi;;
+esac
+
