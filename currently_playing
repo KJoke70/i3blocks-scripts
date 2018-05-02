@@ -12,9 +12,9 @@ max_artist_len = 12
 dots = u"…"
 #play = u"🔊"
 #stop = u"🔇"
-pause = u"⏸  "
-play = u"⏵  "
-stop = u"⏹  "
+pause = u"⏸ "
+play = u"⏵ "
+stop = u"⏹ "
 
 client = musicpd.MPDClient()
 client.connect(host, port)
