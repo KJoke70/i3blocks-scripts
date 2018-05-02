@@ -83,8 +83,8 @@ def print_status():
             info_string += " [%02d:%02d/%02d:%02d]" % (e.minute, e.second,
                     t.minute, t.second)
         print(info_string)
-    else:
-        print(stop + dots)
+    #else:
+    #    print(stop + dots)
 
 print_status()
 
