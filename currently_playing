@@ -9,16 +9,10 @@ max_len = 25
 max_title_len = 20
 max_artist_len = 12
 
-dots = u"…"
-#play = u"🔊"
-#stop = u"🔇"
-pause = u"⏸ "
-play = u"⏵ "
-stop = u"⏹ "
-#fontawesome
-#pause = u""
-#play = u""
-#stop = u""
+dots = u"\u2026"
+pause = u"\uf28b"
+play = u"\uf144"
+stop = u"\uf28d"
 
 client = musicpd.MPDClient()
 client.connect(host, port)
@@ -33,9 +27,9 @@ def print_status():
 
     if state == 'play' or state == 'pause':
         if state == 'play':
-            song_info = play
+            song_info = play + " "
         else:
-            song_info = pause
+            song_info = pause + " "
 
         a_exists = False
         t_exists = False
