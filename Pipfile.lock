@@ -1,0 +1,30 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "79189677bb035631c2b846bae7694dee2680248f634d31401449dbf7b3e8843a"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "python_version": "3.6"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "python-musicpd": {
+            "hashes": [
+                "sha256:72d6cc60340659b30ff9fe21695503c7079a2f976f48aa822b730f61a1bf0f40",
+                "sha256:760c9edc37dbe4df35118aebbfa632c25010a58728e082b7c6b54570dbd05b2c",
+                "sha256:ce9b648921c16bbd05c622cc6c915d3e86e4c97373d2b2be8222c5679890045b"
+            ],
+            "index": "pypi",
+            "version": "==0.4.2"
+        }
+    },
+    "develop": {}
+}
