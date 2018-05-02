@@ -2,17 +2,25 @@
 
 import musicpd
 from datetime import datetime, timedelta
+import os.path
 
 host = "localhost"
 port = 6600
 max_len = 25
 max_title_len = 20
-max_artist_len = 12
+max_artist_len = 15
 
-dots = u"\u2026"
-pause = u"\uf28b"
-play = u"\uf144"
-stop = u"\uf28d"
+#dots = u"\u2026"
+#pause = u"\uf28b"
+#play = u"\uf144"
+#stop = u"\uf28d"
+
+dots = "<span font_desc='Font Awesome 5 Free Solid'>&#x2026;</span>"
+pause = "<span font_desc='Font Awesome 5 Free Solid'>&#xf28b;</span>"
+play =  "<span font_desc='Font Awesome 5 Free Solid'>&#xf144;</span>"
+stop = "<span font_desc='Font Awesome 5 Free Solid'>&#xf28d;</span>"
+
+
 
 client = musicpd.MPDClient()
 client.connect(host, port)
@@ -52,6 +60,7 @@ def print_status():
             if 'http' in file_name:
                 file_name = "<url>"
             else:
+                file_name = os.path.splitext(os.path.basename(file_name))[0]
                 file_name = dots + file_name[-max_len:] \
                         if len(file_name) > max_len else file_name
 
@@ -77,8 +86,8 @@ def print_status():
             info_string += " [%02d:%02d/%02d:%02d]" % (e.minute, e.second,
                     t.minute, t.second)
         print(info_string)
-    #else:
-    #    print(stop + dots)
+    else:
+        print(stop + dots)
 
 print_status()
 
