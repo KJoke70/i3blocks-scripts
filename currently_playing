@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import musicpd
-#import time
 from datetime import datetime, timedelta
 
 host = "localhost"
@@ -9,6 +8,13 @@ port = 6600
 max_len = 25
 max_title_len = 20
 max_artist_len = 12
+
+dots = u"…"
+#play = u"🔊"
+#stop = u"🔇"
+pause = u"⏸  "
+play = u"⏵  "
+stop = u"⏹  "
 
 client = musicpd.MPDClient()
 client.connect(host, port)
@@ -22,8 +28,11 @@ def print_status():
     state = results[0]['state']
 
     if state == 'play' or state == 'pause':
-        song_info = ""
-        dots = u"…"
+        if state == 'play':
+            song_info = play
+        else:
+            song_info = pause
+
         a_exists = False
         t_exists = False
         f_exists = False
@@ -49,11 +58,11 @@ def print_status():
                         if len(file_name) > max_len else file_name
 
         if a_exists and not t_exists:
-            song_info = artist + " - " + dots
+            song_info += artist + " - " + dots
         elif a_exists and t_exists:
-            song_info = artist + " - " + title
+            song_info += artist + " - " + title
         if not a_exists and not t_exists:
-            song_info = file_name
+            song_info += file_name
 
         # elapsed_time / total_time
         elapsed = int(float(results[0]['elapsed']))
@@ -71,12 +80,8 @@ def print_status():
                     t.minute, t.second)
         print(info_string)
     else:
-        print("---")
+        print(stop + dots)
 
-
-#for i in range(1000):
-#    print_status()
-#    time.sleep(1)
 print_status()
 
 
