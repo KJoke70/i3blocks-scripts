@@ -65,7 +65,7 @@ def main():
                 title_str, time_str, index = generate_title_string(data, args, index)
                 title_string = '%s%s%s' % (pause, title_str, time_str)
             else:
-                title_string = '%s %s' % (stop, generate_title_string(None, args))
+                title_string = '%s  %s' % (stop, generate_title_string(None, args))
 
             print(title_string)
             sys.stdout.flush()
@@ -78,9 +78,9 @@ def main():
 def generate_title_string(data, args, previous_index = 0):
     if data is None:
         if args.pango:
-            return '<span foreground="#a2a5aa"><i>%s</i></span>' % '-' * args.string_length - 2
+            return '<span foreground="#a2a5aa"><i>%s</i></span>' % '-' * (args.string_length - 3)
         else:
-            return '-' * args.string_length - 2
+            return '-' * (args.string_length - 3)
     else:
         elapsed = int(float(data[0]['elapsed']))
         total = int(float(data[0]['duration']))
@@ -119,17 +119,15 @@ def generate_title_string(data, args, previous_index = 0):
         else:
             song_info = file_name
 
-        if len(song_info) <= remaining_length - 2:
+        if len(song_info) <= remaining_length - 3:
             song_info = song_info.center(remaining_length, ' ')
             idx = 0.0
         else:
-            idx = previous_index + args.text_refresh_rate
-            print(idx)
-            song_info = song_info[int(idx):remaining_length-2+int(idx)]
+            idx = (previous_index + args.text_refresh_rate) % (len(song_info) + 4)
+            end = int(idx) + remaining_length - 3
+            song_info = song_info + ' ++ ' + song_info
+            song_info = song_info[int(idx):end]
             song_info = song_info.center(remaining_length, ' ')
-
-
-
 
         return song_info, time_str, idx
 
@@ -169,7 +167,7 @@ def time_string(elapsed, total):
         return "[%02d:%02d:%02d/%02d:%02d:%02d]" % (e.hour, e.minute, e.second,
                 t.hour, t.minute, t.second)
     else:
-        return " [%02d:%02d/%02d:%02d]" % (e.minute, e.second, t.minute, t.second)
+        return "[%02d:%02d/%02d:%02d]" % (e.minute, e.second, t.minute, t.second)
 
 if __name__ == "__main__":
     main()
