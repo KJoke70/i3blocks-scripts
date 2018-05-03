@@ -92,7 +92,7 @@ def generate_title_string(data, args, previous_index = 0):
         a_exists = False
         t_exists = False
         f_exists = False
-        file_name = "<no data>"
+        file_name = "[no data]"
 
         keys = data[1].keys()
 
