@@ -3,6 +3,8 @@
 import musicpd
 from datetime import datetime, timedelta
 import os.path
+import time
+import sys
 
 host = "localhost"
 port = 6600
@@ -88,10 +90,19 @@ def print_status():
             info_string += " [%02d:%02d/%02d:%02d]" % (e.minute, e.second,
                     t.minute, t.second)
         print(info_string)
+        sys.stdout.flush()
     else:
         print(stop + dots)
+        sys.stdout.flush()
 
-print_status()
+#print_status()
+while True:
+    try:
+        print_status()
+        time.sleep(0.5)
+    except:
+        client.close()
+        client.disconnect()
 
 
 client.close()
