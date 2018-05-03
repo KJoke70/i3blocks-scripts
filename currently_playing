@@ -106,7 +106,7 @@ def generate_title_string(data, args, previous_index = 0):
             f_exists = True
             file_name = data[1]['file']
             if 'http' in file_name:
-                file_name = "<url>" #TODO get name from url?
+                file_name = "[url]" #TODO get name from url?
             else:
                 file_name = os.path.splitext(os.path.basename(file_name))[0]
 
