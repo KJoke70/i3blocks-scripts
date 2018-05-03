@@ -6,9 +6,11 @@ import os.path
 
 host = "localhost"
 port = 6600
-max_len = 25
+
 max_title_len = 20
 max_artist_len = 15
+max_len = max_title_len + max_artist_len + 3
+time_len = 19
 
 #dots = u"\u2026"
 #pause = u"\uf28b"
@@ -34,10 +36,11 @@ def print_status():
     state = results[0]['state']
 
     if state == 'play' or state == 'pause':
-        if state == 'play':
-            song_info = play + " "
-        else:
-            song_info = pause + " "
+        #if state == 'play':
+        #    song_info = play + " "
+        #else:
+        #    song_info = pause + " "
+        song_info = ''
 
         a_exists = False
         t_exists = False
@@ -77,14 +80,15 @@ def print_status():
         e = datetime(1,1,1) + timedelta(seconds=elapsed)
         t = datetime(1,1,1) + timedelta(seconds=length)
 
-        info_string = song_info
+        info_string = play + ' ' if state == 'play' else pause + ' '
+        info_string += song_info.center(max_len, ' ')
 
         if length > 3600:
-            info_string += " [%02d:%02d:%02d/%02d:%02d:%02d]" % (e.hour, e.minute,
-                    e.second, t.hour, t.minute, t.second)
+            info_string += (" [%02d:%02d:%02d/%02d:%02d:%02d]" % (e.hour, e.minute,
+                    e.second, t.hour, t.minute, t.second)).center(time_len, ' ')
         else:
-            info_string += " [%02d:%02d/%02d:%02d]" % (e.minute, e.second,
-                    t.minute, t.second)
+            info_string += (" [%02d:%02d/%02d:%02d]" % (e.minute, e.second,
+                    t.minute, t.second)).center(time_len, ' ')
         print(info_string)
     else:
         print(stop + dots)
