@@ -28,11 +28,11 @@ optional arguments:
   --host HOST, -s HOST  Specify the host mpd is running on
   --port PORT, -p PORT  Specify the port mpd is running on
   --play_symbol PLAY_SYMBOL
-                        Symbol-code for playing music
+                        Symbol-code for playing music (default is f144)
   --pause_symbol PAUSE_SYMBOL
-                        Symbol-code for paused music
+                        Symbol-code for paused music (default is f28b)
   --stop_symbol STOP_SYMBOL
-                        Symbol-code for stopped music
+                        Symbol-code for stopped music (default is f28d)
   --refresh-time REFRESH_TIME, -r REFRESH_TIME
                         Interval for when to check data in seconds (float)
   --text-refresh-rate TEXT_REFRESH_RATE, -R TEXT_REFRESH_RATE
@@ -49,6 +49,18 @@ optional arguments:
   --no-artist           Disable showing the artist
   --no-title            Disable showing the title
 ```
+
+The block in your i3blocks config should look something like this:
+
+```
+[currently_playing]
+command=/path/to/the/script/currently_playing --pango #with all parameters you need
+interval=persist
+separator=true
+markup=pango
+align=center
+```
+
 
 #### Examples ####
 
