@@ -48,6 +48,7 @@ class printThread(threading.Thread):
 
 def print_title(thread_name, delay):
     global index
+    global info_string
     while True:
         if exit_flag:
             threadName.exit()
@@ -100,7 +101,6 @@ def on_window_focus(i3, e):
     set_info_string(focused)
 
 def set_info_string(window):
-    global index
     global name
     global program
     global floating
@@ -117,7 +117,7 @@ def set_info_string(window):
     name = window.name
 
 try:
-    thread1 = printThread(1, "Thread-1", 1)
+    thread1 = printThread(1, "Thread-1", args.refresh_time)
     i3 = i3ipc.Connection()
     focused = i3.get_tree().find_focused()
     set_info_string(focused)
