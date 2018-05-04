@@ -78,7 +78,7 @@ def main():
 def generate_title_string(data, args, previous_index = 0):
     if data is None:
         if args.pango:
-            return '<span foreground="#a2a5aa"><i>%s</i></span>' % '-' * (args.string_length - 3)
+            return '<span foreground="#a2a5aa"><i>%s</i></span>' % ('-' * (args.string_length - 3))
         else:
             return '-' * (args.string_length - 3)
     else:
