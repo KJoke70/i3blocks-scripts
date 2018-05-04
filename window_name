@@ -100,21 +100,32 @@ def on_window_focus(i3, e):
     focused = i3.get_tree().find_focused()
     set_info_string(focused)
 
+def on_workspace_focus(self, e):
+    if e.current:
+        try:
+            w = e.find_focused()
+            set_info_string(w)
+        except:
+            set_info_string(None)
+
 def set_info_string(window):
     global name
     global program
     global floating
     global popup
     global urgent
-    floating = False
-    popup = False
-    urgent = window.urgent
-    if "on" in window.floating:
-        floating = True
-    if window.window_role == "pop-up":
-        popup = True
-    program = window.window_class
-    name = window.name
+    if window is None or window.type == 'workspace':
+        name = '[none]'
+    else:
+        floating = False
+        popup = False
+        urgent = window.urgent
+        if "on" in window.floating:
+            floating = True
+        if window.window_role == "pop-up":
+            popup = True
+        program = window.window_class
+        name = window.name
 
 try:
     thread1 = printThread(1, "Thread-1", args.refresh_time)
@@ -125,6 +136,9 @@ try:
     i3.on('window::title', on_window_focus)
     i3.on('window::floating', on_window_focus)
     i3.on('window::urgent', on_window_focus)
+    i3.on('window::close', on_window_focus)
+    i3.on('workspace::focus', on_workspace_focus)
+    #TODO window close, open
     thread1.start()
     i3.main()
     thread1.join()
