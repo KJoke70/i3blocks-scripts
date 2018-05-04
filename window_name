@@ -91,6 +91,7 @@ def print_title(thread_name, delay):
         else:
             info_string = program_string + name_string
         print(info_string)
+        sys.stdout.flush()
 
 
 
