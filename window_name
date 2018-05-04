@@ -116,6 +116,7 @@ def set_info_string(window):
     global urgent
     if window is None or window.type == 'workspace':
         name = '[none]'
+        program = ''
     else:
         floating = False
         popup = False
