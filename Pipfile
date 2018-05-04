@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 python-musicpd = "*"
+"i3ipc" = "*"
 
 [dev-packages]
 

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "79189677bb035631c2b846bae7694dee2680248f634d31401449dbf7b3e8843a"
+            "sha256": "0f07ae7f652c19b1d1f8f58ec89aba12a07b94d6447d178f48c32ee14be24311"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,6 +16,19 @@
         ]
     },
     "default": {
+        "enum-compat": {
+            "hashes": [
+                "sha256:939ceff18186a5762ae4db9fa7bfe017edbd03b66526b798dd8245394c8a4192"
+            ],
+            "version": "==0.0.2"
+        },
+        "i3ipc": {
+            "hashes": [
+                "sha256:a3d5b84c69253585772239c053d1a5e8d140f8dae28a96fb426a0f224859ed74"
+            ],
+            "index": "pypi",
+            "version": "==1.5.1"
+        },
         "python-musicpd": {
             "hashes": [
                 "sha256:72d6cc60340659b30ff9fe21695503c7079a2f976f48aa822b730f61a1bf0f40",
