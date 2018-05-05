@@ -19,9 +19,12 @@ parser.add_argument('--string-length', '-l', type=int, default=25, \
 parser.add_argument('--pango', '-m', action='store_true', \
       help='Enables printing with pango markup. ' \
       ' Required for some unicode symbols.')
-#parser.add_argument('--unicode-font', type=str, \
-#      default='Font Awesome 5 Free Solid', \
-#      help='Font for drawing unicode symbols')
+parser.add_argument('--simple', '-s', action='store_true', \
+      help='Enables printing with pango markup. ' \
+      ' Required for some unicode symbols.')
+parser.add_argument('--unicode-font', type=str, \
+      default='Font Awesome 5 Free Solid', \
+      help='Font for drawing unicode symbols')
 #parser.add_argument('--regular-font', type=str, \
 #      default='DejaVu Sans Mono', \
 #      help='Font for regular text')
@@ -44,9 +47,9 @@ class printThread(threading.Thread):
         self.name = name
         self.counter = counter
     def run(self):
-        print_title(self.name, self.counter)
+        print_thread(self.counter)
 
-def print_title(thread_name, delay):
+def print_thread(delay):
     global index
     global info_string
     while True:
@@ -94,6 +97,58 @@ def print_title(thread_name, delay):
         print(info_string)
         sys.stdout.flush()
 
+def print_info():
+    global index
+    global info_string
+
+    program_string = "[%s]" % program
+    remaining_length = args.string_length - len(program_string)
+
+    if len(name) <= remaining_length - 2:
+        name_string = name.center(remaining_length, ' ')
+        index = 0.0
+    elif len(name) > remaining_length - 2 and args.simple:
+        if args.pango:
+            dots = "<span font_desc='%s'>&#x%s;</span>" % \
+                    (args.unicode_font, "&#x2026;")
+        else:
+            dots = "\u2026"
+
+        name_string = cgi.escape(name[:remaining_length - 3], quote=True) + dots
+        name_string = name_string.center(remaining_length, ' ')
+    else:
+        index = (index + args.text_refresh_rate) % (len(name) + 4)
+        end = int(index) + remaining_length - 3
+        name_string = name + " ++ " + name
+        name_string = name_string[int(index):end]
+        name_string = name_string.center(remaining_length, ' ')
+
+    if args.pango:
+        program_string = cgi.escape(program_string, quote=True)
+        name_string = cgi.escape(name_string, quote=True)
+
+        if urgent:
+            info_string = \
+                    '<span foreground="#FFFFFF" ' \
+                    'background="#FF0000">' \
+                    '<b>%s</b><i>%s</i></span>' % (program_string, name_string)
+        elif popup:
+            info_string = \
+                    '<span foreground="#000000" ' \
+                    'background="#FF9966">' \
+                    '<b>%s</b><i>%s</i></span>' % (program_string, name_string)
+        elif floating:
+            info_string = \
+                    '<span foreground="#000000" ' \
+                    'background="#FFFF00">' \
+                    '<b>%s</b><i>%s</i></span>' % (program_string, name_string)
+        else:
+            info_string = '<span><b>%s</b><i>%s</i></span>' % (program_string, name_string)
+    else:
+        info_string = program_string + name_string
+    print(info_string)
+    sys.stdout.flush()
+
 
 
 def on_window_focus(i3, e):
@@ -127,9 +182,10 @@ def set_info_string(window):
             popup = True
         program = window.window_class
         name = window.name
+    if args.simple:
+        print_info()
 
 try:
-    thread1 = printThread(1, "Thread-1", args.refresh_time)
     i3 = i3ipc.Connection()
     focused = i3.get_tree().find_focused()
     set_info_string(focused)
@@ -139,10 +195,14 @@ try:
     i3.on('window::urgent', on_window_focus)
     i3.on('window::close', on_window_focus)
     i3.on('workspace::focus', on_workspace_focus)
-    #TODO window close, open
-    thread1.start()
+    if not args.simple:
+        thread1 = printThread(1, "Thread-1", args.refresh_time)
+        thread1.start()
     i3.main()
-    thread1.join()
-except:
+    if not args.simple:
+        thread1.join()
+except Exception as e:
+    print(e)
+    print("Unexpected error:", sys.exc_info()[0])
     exit_flag = 1
 
