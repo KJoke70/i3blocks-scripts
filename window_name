@@ -20,11 +20,10 @@ parser.add_argument('--pango', '-m', action='store_true', \
       help='Enables printing with pango markup. ' \
       ' Required for some unicode symbols.')
 parser.add_argument('--simple', '-s', action='store_true', \
-      help='Enables printing with pango markup. ' \
-      ' Required for some unicode symbols.')
-parser.add_argument('--unicode-font', type=str, \
-      default='Font Awesome 5 Free Solid', \
-      help='Font for drawing unicode symbols')
+      help='Mode without a separate thread for text display')
+#parser.add_argument('--unicode-font', type=str, \
+#      default='Font Awesome 5 Free Solid', \
+#      help='Font for drawing unicode symbols')
 #parser.add_argument('--regular-font', type=str, \
 #      default='DejaVu Sans Mono', \
 #      help='Font for regular text')
@@ -69,13 +68,9 @@ def print_info():
         name_string = name.center(remaining_length, ' ')
         index = 0.0
     elif len(name) > remaining_length - 2 and args.simple:
-        if args.pango:
-            dots = "<span font_desc='%s'>&#x%s;</span>" % \
-                    (args.unicode_font, "&#x2026;")
-        else:
-            dots = "\u2026"
+        dots = "\u2026"
+        name_string = name[:remaining_length - 3] + dots
 
-        name_string = cgi.escape(name[:remaining_length - 3], quote=True) + dots
         name_string = name_string.center(remaining_length, ' ')
     else:
         index = (index + args.text_refresh_rate) % (len(name) + 4)
