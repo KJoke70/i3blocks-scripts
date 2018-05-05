@@ -84,7 +84,10 @@ def generate_title_string(data, args, previous_index = 0):
             return '-' * (args.string_length - 3)
     else:
         elapsed = int(float(data[0]['elapsed']))
-        total = int(float(data[0]['duration']))
+        if 'duration' in data[0].keys():
+            total = int(float(data[0]['duration']))
+        else:
+            total = None
         time_str = time_string(elapsed, total)
         time_len = len(time_str)
 #        remaining_len = args.string_length - time_len - 3 #play symbol + spaces
@@ -162,13 +165,17 @@ def time_string(elapsed, total):
         [mm:ss/mm:ss] or [hh:mm:ss/hh:mm:ss]
     """
     e = datetime(1,1,1) + timedelta(seconds=elapsed)
-    t = datetime(1,1,1) + timedelta(seconds=total)
+    if total is not None:
+        t = datetime(1,1,1) + timedelta(seconds=total)
 
-    if total > 3600:
-        return "[%02d:%02d:%02d/%02d:%02d:%02d]" % (e.hour, e.minute, e.second,
-                t.hour, t.minute, t.second)
+    if total is None:
+        return "[%02d:%02d:%02d/--:--:--]" % (e.hour, e.minute, e.second)
     else:
-        return "[%02d:%02d/%02d:%02d]" % (e.minute, e.second, t.minute, t.second)
+        if total > 3600:
+            return "[%02d:%02d:%02d/%02d:%02d:%02d]" % (e.hour, e.minute, e.second,
+                    t.hour, t.minute, t.second)
+        else:
+            return "[%02d:%02d/%02d:%02d]" % (e.minute, e.second, t.minute, t.second)
 
 if __name__ == "__main__":
     main()
