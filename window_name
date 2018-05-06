@@ -128,6 +128,9 @@ def set_info_string(window):
     if window is None or window.type == 'workspace':
         name = '[none]'
         program = 'none'
+        floating = False
+        popup = False
+        urgent = False
     else:
         floating = False
         popup = False
