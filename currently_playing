@@ -133,7 +133,10 @@ def generate_title_string(data, args, previous_index = 0):
             song_info = song_info[int(idx):end]
             song_info = song_info.center(remaining_length, ' ')
 
-        return cgi.escape(song_info, quote=True), time_str, idx
+        if args.pango:
+            return cgi.escape(song_info, quote=True), time_str, idx
+        else:
+            return song_info, time_str, idx
 
 def get_info(client):
     client.command_list_ok_begin()
