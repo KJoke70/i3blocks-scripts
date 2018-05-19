@@ -103,12 +103,18 @@ def generate_title_string(data, args, previous_index = 0):
         if not args.no_artist and 'artist' in keys:
             a_exists = True
             artist = data[1]['artist']
+            if type(artist) == list:
+                artist = concat_list(artist)
         if not args.no_title and 'title' in keys:
             t_exists = True
             title = data[1]['title']
+            if type(title) == list:
+                title = concat_list(title)
         if 'file' in keys:
             f_exists = True
             file_name = data[1]['file']
+            if type(file_name) == list:
+                file_name = concat_list(file_name)
             if 'http' in file_name:
                 file_name = "[url]" #TODO get name from url?
             else:
@@ -179,6 +185,15 @@ def time_string(elapsed, total):
                     t.hour, t.minute, t.second)
         else:
             return "[%02d:%02d/%02d:%02d]" % (e.minute, e.second, t.minute, t.second)
+
+
+def concat_list(l):
+    result = ""
+    for i in range(len(l)-1):
+        result += l[i] + " | "
+    result += l[-1]
+    return result
+
 
 if __name__ == "__main__":
     main()
