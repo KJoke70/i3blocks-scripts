@@ -45,13 +45,15 @@ class printThread(threading.Thread):
         self.ThreadID = threadID
         self.name = name
         self.counter = counter
+        self.daemon = True
     def run(self):
         print_thread(self.counter)
 
 def print_thread(delay):
     while True:
         if exit_flag:
-            threadName.exit()
+#            printThread.exit()
+            return
 
         time.sleep(delay)
         print_info()
@@ -164,4 +166,7 @@ except Exception as e:
     print(e)
     print("Unexpected error:", sys.exc_info()[0])
     exit_flag = 1
+finally:
+    exit_flag = 1
+    i3.main_quit()
 
