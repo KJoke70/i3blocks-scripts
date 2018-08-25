@@ -63,7 +63,7 @@ def print_info():
     global index
     global info_string
 
-    program_string = "[%s]" % program
+    program_string = ("[%s]" % program) if len(program) > 0 else ""
     remaining_length = args.string_length - len(program_string)
 
     if len(name) <= remaining_length - 2:
@@ -128,8 +128,8 @@ def set_info_string(window):
     global popup
     global urgent
     if window is None or window.type == 'workspace':
-        name = '[none]'
-        program = 'none'
+        name = ''
+        program = ''
         floating = False
         popup = False
         urgent = False
