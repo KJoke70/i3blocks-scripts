@@ -63,7 +63,7 @@ def print_info():
     global index
     global info_string
 
-    program_string = ("[%s]" % program) if len(program) > 0 else ""
+    program_string = ("[%s]" % program) if len(str(program)) > 0 else ""
     remaining_length = args.string_length - len(program_string)
 
     if len(name) <= remaining_length - 2:
