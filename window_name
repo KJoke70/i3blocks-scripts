@@ -21,6 +21,15 @@ parser.add_argument('--pango', '-m', action='store_true', \
       ' Required for some unicode symbols.')
 parser.add_argument('--simple', '-s', action='store_true', \
       help='Mode without a separate thread for text display')
+parser.add_argument('--urgent-bg', type=str, \
+      default='#EF2F27', \
+      help='Background color for urgent windows')
+parser.add_argument('--popup-bg', type=str, \
+      default='#FF9966', \
+      help='Background color for popup windows')
+parser.add_argument('--floating-bg', type=str, \
+      default='#FF8700', \
+      help='Background color for floating windows')
 #parser.add_argument('--unicode-font', type=str, \
 #      default='Font Awesome 5 Free Solid', \
 #      help='Font for drawing unicode symbols')
@@ -88,18 +97,18 @@ def print_info():
         if urgent:
             info_string = \
                     '<span foreground="#FFFFFF" ' \
-                    'background="#FF0000">' \
-                    '<b>%s</b><i>%s</i></span>' % (program_string, name_string)
+                    'background="%s' \
+                    '<b>%s</b><i>%s</i></span>' % (args.urgent_bg, program_string, name_string)
         elif popup:
             info_string = \
                     '<span foreground="#000000" ' \
-                    'background="#FF9966">' \
-                    '<b>%s</b><i>%s</i></span>' % (program_string, name_string)
+                    'background="%s">' \
+                    '<b>%s</b><i>%s</i></span>' % (args.popup_bg, program_string, name_string)
         elif floating:
             info_string = \
                     '<span foreground="#000000" ' \
-                    'background="#FFFF00">' \
-                    '<b>%s</b><i>%s</i></span>' % (program_string, name_string)
+                    'background="%s">' \
+                    '<b>%s</b><i>%s</i></span>' % (args.floating_bg, program_string, name_string)
         else:
             info_string = '<span><b>%s</b><i>%s</i></span>' % (program_string, name_string)
     else:
