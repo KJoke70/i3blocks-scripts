@@ -1,9 +1,63 @@
 #!/bin/bash
 
-FREQ=$(cpupower frequency-info -fm | grep "current CPU frequency:" | grep -Eo '[0-9]+([.][0-9]+)?')
+CLASS=""
+TOOLTIP=""
+TEXT=""
+PERCENTAGE=""
+
+while getopts "hj" arg; do
+    case $arg in
+    h)
+        echo "usage:"
+        echo "  -h  show this help text"
+        echo "  -j  json output (for waybar)"
+        ;;
+    j)
+        JSON=1
+        ;;
+    *)
+        ;;
+    esac
+done
+
+function getHumanReadable {
+    local FACTOR=10000
+    local PRECISION=100
+    local ROUNDED="$(("$1" / "$FACTOR"))"
+    echo "$(("$ROUNDED" / "$PRECISION")).$(("$ROUNDED" % "$PRECISION"))"
+}
+
+function getPercentage {
+    local MIN=$1
+    local MAX=$2
+    local INPUT=$3
+    echo "$(( (("$INPUT" - "$MIN") * 100) / ("$MAX" - "$MIN") ))"
+}
+
+RAW_FREQ=$(cpupower frequency-info -f | grep "current CPU frequency:" | grep -Eo '[0-9]+([.][0-9]+)?')
+
+FREQ="$(getHumanReadable "$RAW_FREQ")"
+
+LIMITS=$(cpupower frequency-info -l | tail -n1)
+MIN_LIMIT=${LIMITS// [0-9]*/""}
+MAX_LIMIT=${LIMITS//[0-9]* /""}
+
+PERCENTAGE="$(getPercentage "$MIN_LIMIT" "$MAX_LIMIT" "$RAW_FREQ")"
 
 if [[ "$FREQ" != *"."* ]]; then
-  printf '%.2f GHz\n' 0.$FREQ
+    FREQ="0.$FREQ"
+fi
+
+TEXT="$(printf '%.2f GHz\n' "$FREQ")"
+
+TOOLTIP="Minimum frequency: $(getHumanReadable "$MIN_LIMIT") GHz\nMaximum frequency: $(getHumanReadable "$MAX_LIMIT") GHz\nCurrent frequency: $FREQ GHz ($PERCENTAGE %)"
+
+CLASS="slow"
+[[ "$PERCENTAGE" -gt "55" ]] && CLASS="medium"
+[[ "$PERCENTAGE" -gt "85" ]] && CLASS="fast"
+
+if [[ "$JSON" == "1" ]]; then
+    echo "{\"text\": \"$TEXT\", \"tooltip\": \"$TOOLTIP\", \"class\": \"$CLASS\", \"percentage\": $PERCENTAGE}"
 else
-  printf '%.2f GHz\n' $FREQ
+    echo "$TEXT"
 fi
